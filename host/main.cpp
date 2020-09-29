@@ -57,7 +57,6 @@ Laplacian construct_laplacian_matrix(int n){
     //Row for each equation nxm equations
     
     Laplacian lp_matrix = Laplacian::Zero(n*n, n*n);
-    std::cout << "LP:\n" << lp_matrix << std::endl;
     
     
     //define solution grid 
@@ -66,7 +65,6 @@ Laplacian construct_laplacian_matrix(int n){
     int k = 0;
     int c = 0;
     spacial_vector mat_mult_row = spacial_vector::Zero(1, n*n);
-    std::cout << "Row:\n" << mat_mult_row << std::endl;
     //for each i,j in solution grid
     for(int i = 0; i < n; i++){ // iterate over solution grid
         for(int j = 0; j < n; j++){ // iterate over solution grid
@@ -78,33 +76,23 @@ Laplacian construct_laplacian_matrix(int n){
                     //check adjacency
                     if(i == ii && j == jj){
                         mat_mult_row(0, k++)  = -4;
-                        puts("1");
                     } else if(i-1 == ii && j == jj){
                         mat_mult_row(0, k++)  = 1;
-                        puts("2");
                     }else if(i+1 == ii && j == jj){
                         mat_mult_row(0, k++)  = 1;
-                        printf("3: (i,j) = (%d, %d) (ii, jj) = (%d, %d)\n", i, j, ii, jj);;
-                    }else if(i == ii && j-1 == jj){
-                        mat_mult_row(0, k++)  = 1;
-                        puts("4");
                     }else if(i == ii && j+1 == jj){
                         mat_mult_row(0, k++)  = 1;
-                        printf("5: (i,j) = (%d, %d) (ii, jj) = (%d, %d)\n", i, j, ii, jj);
                     }else{
                         mat_mult_row(0, k++)  = 0;
-                        printf("5: (i,j) = (%d, %d) (ii, jj) = (%d, %d)\n", i, j, ii, jj);
                     }
                     
 
                 }
             }
             
-            std::cout << "Row:\n" << mat_mult_row << std::endl;
              
             lp_matrix.block(c++,0,1, n*n) = mat_mult_row;
             
-            std::cout << "LP:\n" << lp_matrix << std::endl;
              
         }
        
