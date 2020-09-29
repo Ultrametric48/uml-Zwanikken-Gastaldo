@@ -52,11 +52,11 @@ float y_laplacian(float (*func)(float x, float y, float h), float x, float y, fl
 
 
 
-Laplacian construct_laplacian_matrix(int n, int m){
+Laplacian construct_laplacian_matrix(int n){
     //Finite difference operator
     //Row for each equation nxm equations
     
-    Laplacian lp_matrix = Laplacian::Zero(n*m, m*n);
+    Laplacian lp_matrix = Laplacian::Zero(n*n, n*n);
     std::cout << "LP:\n" << lp_matrix << std::endl;
     
     
@@ -65,15 +65,15 @@ Laplacian construct_laplacian_matrix(int n, int m){
     //grid = solution grid U boundary grid
     int k = 0;
     int c = 0;
-    spacial_vector mat_mult_row = spacial_vector::Zero(1, n*m);
+    spacial_vector mat_mult_row = spacial_vector::Zero(1, n*n);
     std::cout << "Row:\n" << mat_mult_row << std::endl;
     //for each i,j in solution grid
     for(int i = 0; i < n; i++){ // iterate over solution grid
-        for(int j = 0; j < m; j++){ // iterate over solution grid
-            mat_mult_row = spacial_vector::Zero(1, n*m);
+        for(int j = 0; j < n; j++){ // iterate over solution grid
+            mat_mult_row = spacial_vector::Zero(1, n*n);
             k=0;
             for(int ii = 0; ii < n; ii++){ // iterate over grid
-                for(int jj = 0; jj < m; jj++){ // iterate over grid
+                for(int jj = 0; jj < n; jj++){ // iterate over grid
             
                     //check adjacency
                     if(i == ii && j == jj){
@@ -102,7 +102,7 @@ Laplacian construct_laplacian_matrix(int n, int m){
             
             std::cout << "Row:\n" << mat_mult_row << std::endl;
              
-            lp_matrix.block(c++,0,1, n*m) = mat_mult_row;
+            lp_matrix.block(c++,0,1, n*n) = mat_mult_row;
             
             std::cout << "LP:\n" << lp_matrix << std::endl;
              
@@ -129,11 +129,11 @@ int main(int argc, char **argv){
     
     
     int n = 3;
-    int m = 3;
     
-    Laplacian lp_matrix = Laplacian::Zero(n, m);
     
-    lp_matrix = construct_laplacian_matrix(n, m);
+    Laplacian lp_matrix = Laplacian::Zero(n, n);
+    
+    lp_matrix = construct_laplacian_matrix(n);
     
     
     
