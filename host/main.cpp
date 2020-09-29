@@ -75,15 +75,15 @@ Laplacian construct_laplacian_matrix(int n){
             
                     //check adjacency
                     if(i == ii && j == jj){
-                        mat_mult_row(0, k++)  = -4;
+                        mat_mult_row(0, k++)  = -4.0;
                     } else if(i-1 == ii && j == jj){
-                        mat_mult_row(0, k++)  = 1;
+                        mat_mult_row(0, k++)  = 1.0;
                     }else if(i+1 == ii && j == jj){
-                        mat_mult_row(0, k++)  = 1;
+                        mat_mult_row(0, k++)  = 1.0;
                     }else if(i == ii && j+1 == jj){
-                        mat_mult_row(0, k++)  = 1;
+                        mat_mult_row(0, k++)  = 1.0;
                     }else{
-                        mat_mult_row(0, k++)  = 0;
+                        mat_mult_row(0, k++)  = 0.0;
                     }
                     
 
@@ -109,25 +109,37 @@ Laplacian construct_laplacian_matrix(int n){
 int main(int argc, char **argv){
     
     
-    float x_tmp;
-    float y_tmp;
     
-
-    twoDGrid grid = twoDGrid::Zero(100, 100); //finite difference stencil. Typical algorithms will solve the Laplacian iterating inward from the boundary conditions.  
+    int n = 2; //size of grid nxn matrix
     
     
-    int n = 3;
+    
+    spacial_vector u;
+    spacial_vector b = spacial_vector::Zero(n*n,1); //boundary vector
+    b(0) = -2.0;
+    b(1) = -3.0;
+    b(2) = -3.0;
+    b(3) = -4.0;
+    std::cout << "b:\n" << b  << std::endl;
     
     
     Laplacian lp_matrix = Laplacian::Zero(n, n);
     
+    
+    
+    std::cout << "Constructing Laplacian...";
     lp_matrix = construct_laplacian_matrix(n);
+    std::cout << " done. \n"  << std::endl;
+     std::cout << "The Laplacian discrete operator matrix:\n" << lp_matrix << std::endl;
     
-    
+    std::cout << "Solving linear system for vector solution vector u...";
+    u = lp_matrix.colPivHouseholderQr().solve(b);
+    std::cout << " done. \n"  << std::endl;
     
     
     std::cout << "***************OUTPUT***************:\n"  << std::endl;
     std::cout << "The Laplacian discrete operator matrix:\n" << lp_matrix << std::endl;
+    std::cout << "Solution vector u:\n" << u << std::endl;
     
     
 }
